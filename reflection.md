@@ -13,6 +13,7 @@ My initial design included four classes: Owner, Pet, Task, and Scheduler. The Ow
 
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
+
 During implementation, I kept the four main classes from my initial UML design: Owner, Pet, Task, and Scheduler. I used the Owner class to manage multiple pets and provide access to all their tasks, while each Pet stores its own task list. I also added methods for removing pets and tasks and checking task completion. These decisions helped organize the code and made each class responsible for specific tasks. I used type hints and dataclasses to make the code easier to read and maintain. 
 
 ---
@@ -38,10 +39,14 @@ During implementation, I kept the four main classes from my initial UML design: 
 - How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
 - What kinds of prompts or questions were most helpful?
 
+I used AI tools throughout the PawPal+ project to understand the requirements, plan the class structure, and develop the scheduling system. I asked questions about how the Owner, Pet, Task, and Scheduler classes should work together and how to display a pet owner's daily schedule. AI also helped me understand errors, debug my code, and learn how to use Git commands to commit my work to GitHub. The most helpful prompts were the ones that asked for step-by-step explanations, beginner-friendly code examples, and specific ways to fix errors.
+
 **b. Judgment and verification**
 
 - Describe one moment where you did not accept an AI suggestion as-is.
 - How did you evaluate or verify what the AI suggested?
+
+One moment when I did not accept an AI suggestion immediately was when I needed to determine whether the scheduling methods were actually implemented in my code. I compared the suggestions with my pawpal_system.py file and checked whether methods such as sort_by_time(), filter_tasks(), and detect_conflicts() contained working logic or were still unfinished. I also ran the application and checked the displayed schedule to see whether the output matched the expected format and showed the tasks in chronological order. This taught me to verify AI suggestions against my actual code and test results instead of assuming that every suggestion was correct.
 
 ---
 

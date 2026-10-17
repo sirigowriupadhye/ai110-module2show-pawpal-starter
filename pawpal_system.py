@@ -43,12 +43,12 @@ class Pet:
         return self.tasks
 
 
+@dataclass
 class Owner:
     """A person who manages one or more pets."""
 
-    def __init__(self, name: str):
-        self.name = name
-        self.pets: List[Pet] = []
+    name: str
+    pets: List[Pet] = field(default_factory=list)
 
     def add_pet(self, pet: Pet) -> None:
         """Add a pet to this owner."""
@@ -70,6 +70,7 @@ class Scheduler:
     """Organizes tasks. Reaches them through its Owner, never directly via pets."""
 
     def __init__(self, owner: Owner):
+        """Connect this scheduler to the owner whose tasks it will organize."""
         self.owner = owner
 
     def get_all_tasks(self) -> List[Task]:

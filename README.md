@@ -54,6 +54,15 @@ Paste a sample of your app's CLI or Streamlit output here so a reader can see wh
 #   ...
 ```
 
+```
+Today's Schedule for Jordan
+========================================
+07:30  Mochi  Morning walk (daily) [to do]
+08:00  Luna   Breakfast (daily) [to do]
+18:00  Mochi  Evening play (daily) [to do]
+20:15  Luna   Give medication (once) [to do]
+```
+
 ## 🧪 Testing PawPal+
 
 ```bash
@@ -76,10 +85,12 @@ Sample test output:
 
 | Feature | Method(s) | Notes |
 |---------|-----------|-------|
-| Task sorting | | e.g., by priority, duration |
-| Filtering | | e.g., skip tasks if time runs out |
-| Conflict handling | | e.g., overlapping time slots |
-| Recurring tasks | | e.g., daily vs. weekly |
+| Task sorting |sort_by_time() | Organizes tasks by their scheduled time so they appear in chronological order.|
+| Filtering |filter_tasks() | Intended to filter tasks based on specified criteria, such as task description or time. |
+| Conflict handling |detect_conflicts() | 
+
+Intended to identify tasks that overlap in their scheduled times.|
+| Recurring tasks | get_todays_schedule()| Displays scheduled tasks, including daily and one-time tasks, as shown in the schedule output.|
 
 ## 📸 Demo Walkthrough
 
