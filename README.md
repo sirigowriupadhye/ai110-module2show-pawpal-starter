@@ -101,3 +101,24 @@ Describe your app in numbered steps so a reader can follow along without watchin
 5. <!-- Add more steps as needed -->
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or link to a demo video here -->
+
+
+## Testing PawPal+
+
+Test Results:
+
+================================================== test session starts ==================================================
+platform win32 -- Python 3.14.8, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\sirig\Downloads\ai110-module2show-pawpal-starter
+plugins: anyio-4.15.1
+collected 35 items                                                                                                       
+
+tests\test_pawpal.py ...................................                                                           [100%]
+
+================================================== 35 passed in 0.22s ===================================================
+
+Confidence level:
+
+4/5 stars
+
+I am confident in the reliability of PawPal+ because the basic functionality, task management, and chronological sorting have been implemented. The system organizes tasks for multiple pets and provides a clear schedule that is easy to understand. However, some advanced scheduling features still need to be completed and tested thoroughly. I would give the system four out of five stars because it has a solid foundation, but further testing and improvements are needed to ensure its reliability.
