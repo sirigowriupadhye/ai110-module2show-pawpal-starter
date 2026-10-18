@@ -25,11 +25,14 @@ During implementation, I kept the four main classes from my initial UML design: 
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
 - How did you decide which constraints mattered most?
 
+My scheduler considers the time of each task, the pet it belongs to, its frequency, and whether the task has been completed. I prioritized scheduling tasks by time so that the daily schedule appears in chronological order and is easy for the owner to follow. I also included pet names and completion status so the owner can identify which pet needs care and which tasks still need to be done. The current scheduler focuses on organizing tasks rather than assigning different priority levels to them.
+
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
 
+One tradeoff my scheduler makes is that it sorts tasks by their scheduled time without considering task urgency or importance. This means a routine walk and a medication task are organized by time rather than by priority. I chose this approach because sorting by time is simple to implement and makes the schedule easy to understand. In a future version, I could add priority levels for tasks that need special attention.
 ---
 
 ## 3. AI Collaboration

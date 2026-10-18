@@ -85,12 +85,10 @@ Sample test output:
 
 | Feature | Method(s) | Notes |
 |---------|-----------|-------|
-| Task sorting |sort_by_time() | Organizes tasks by their scheduled time so they appear in chronological order.|
-| Filtering |filter_tasks() | Intended to filter tasks based on specified criteria, such as task description or time. |
-| Conflict handling |detect_conflicts() | 
-
-Intended to identify tasks that overlap in their scheduled times.|
-| Recurring tasks | get_todays_schedule()| Displays scheduled tasks, including daily and one-time tasks, as shown in the schedule output.|
+| Task sorting |Scheduler.sort_by_time()| Sorts all of the owner's tasks by scheduled time in chronological order. Returns a new sorted list without changing the original task lists.|
+| Filtering |Scheduler.filter_tasks() | Filters tasks by pet name and/or completion status. Returns a filtered list without deleting or modifying the original tasks.|
+| Conflict handling |Scheduler.detect_conflicts() |Intended to identify tasks that overlap in their scheduled times.|
+| Recurring tasks |Scheduler.get_todays_schedule()| Planned feature: determine which tasks belong in today's schedule using their frequency and scheduled time.|
 
 ## 📸 Demo Walkthrough
 
