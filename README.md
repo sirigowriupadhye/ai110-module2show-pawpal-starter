@@ -23,6 +23,18 @@ Your final app should:
 - Include tests for the most important scheduling behaviors
 
 ## Getting started
+## Implementation summary
+
+PawPal+ is built from four classes in `pawpal_system.py`: Task, Pet, Owner and Scheduler. The class diagram is in `diagrams/uml_final.mmd`.
+
+A Task represents one care activity. It stores a description, a time in 24-hour "HH:MM" format, a frequency ("once", "daily" or "weekly"), a completed flag, and a due date that defaults to today. It can mark itself complete, and its next_occurrence() method returns a new, incomplete copy due one day later for daily tasks or seven days later for weekly tasks. Tasks with any other frequency return nothing.
+
+A Pet stores its name, species, age and its own list of tasks, and it can add a task, remove a task, or return its tasks. An Owner stores a name and a list of pets. It can add or remove pets, and its get_all_tasks() method collects the tasks from every pet into one list.
+
+The Scheduler is connected to a single Owner and reaches tasks only through Owner.get_all_tasks(), never directly through pets. It sorts tasks by due date and then time with sort_by_time(), filters them by pet name and completion status with filter_tasks(), and warns about conflicts with detect_conflicts(), which reports each date and time where two or more unfinished tasks overlap across all of the owner's pets. When a task is finished, complete_task() marks it done and, for daily and weekly tasks, adds the next occurrence to the same pet without creating a duplicate. The get_todays_schedule() method is not implemented yet.
+
+The same backend serves two front ends: a Streamlit app (app.py) for adding pets and tasks and generating a sorted schedule with conflict warnings, and a command-line demo (main.py) that also shows filtering and recurring tasks. The behavior is covered by 35 automated tests in tests/test_pawpal.py.
+
 
 ### Setup
 
@@ -46,22 +58,89 @@ pip install -r requirements.txt
 
 Paste a sample of your app's CLI or Streamlit output here so a reader can see what a generated plan looks like:
 
-```
-# e.g.:
-# Daily plan for Biscuit (Golden Retriever):
-#   08:00 — Morning walk (30 min) [priority: high]
-#   09:00 — Feeding (10 min) [priority: high]
-#   ...
+"Output of python main.py:"
 ```
 
+🐾 Today's Schedule for Jordan
+------------------------------
++-------+----------+--------------------+-----------+----------+
+| Time  | Pet      | Task               | Frequency | Status   |
++-------+----------+--------------------+-----------+----------+
+| 07:30 | 🐕 Mochi | 🚶 Morning walk    | daily     | ⏳ To do |
+| 08:00 | 🐈 Luna  | 🍖 Breakfast       | daily     | ⏳ To do |
+| 09:00 | 🐕 Mochi | 🛁 Grooming        | once      | ⏳ To do |
+| 09:00 | 🐈 Luna  | 🩺 Vet call        | once      | ⏳ To do |
+| 18:00 | 🐕 Mochi | 🎾 Evening play    | daily     | ⏳ To do |
+| 20:15 | 🐈 Luna  | 💊 Give medication | once      | ⏳ To do |
++-------+----------+--------------------+-----------+----------+
+
+🔎 Conflict check
+-----------------
+🚨 WARNING: Conflict on 2026-10-18 at 09:00: Mochi - Grooming, Luna - Vet call
+
+✅ Completed 'Breakfast' (2026-10-18); next one added for 2026-10-19
+
+🐕 Filter: Mochi's tasks (pet_name='Mochi')
+-------------------------------------------
++-------+----------+-----------------+-----------+----------+
+| Time  | Pet      | Task            | Frequency | Status   |
++-------+----------+-----------------+-----------+----------+
+| 18:00 | 🐕 Mochi | 🎾 Evening play | daily     | ⏳ To do |
+| 07:30 | 🐕 Mochi | 🚶 Morning walk | daily     | ⏳ To do |
+| 09:00 | 🐕 Mochi | 🛁 Grooming     | once      | ⏳ To do |
++-------+----------+-----------------+-----------+----------+
+
+⏳ Filter: incomplete tasks (completed=False)
+---------------------------------------------
++-------+----------+--------------------+-----------+----------+
+| Time  | Pet      | Task               | Frequency | Status   |
++-------+----------+--------------------+-----------+----------+
+| 18:00 | 🐕 Mochi | 🎾 Evening play    | daily     | ⏳ To do |
+| 07:30 | 🐕 Mochi | 🚶 Morning walk    | daily     | ⏳ To do |
+| 09:00 | 🐕 Mochi | 🛁 Grooming        | once      | ⏳ To do |
+| 20:15 | 🐈 Luna  | 💊 Give medication | once      | ⏳ To do |
+| 09:00 | 🐈 Luna  | 🩺 Vet call        | once      | ⏳ To do |
+| 08:00 | 🐈 Luna  | 🍖 Breakfast       | daily     | ⏳ To do |
++-------+----------+--------------------+-----------+----------+
+
+🐈 Filter: Luna's incomplete tasks (pet_name='Luna', completed=False)
+---------------------------------------------------------------------
++-------+---------+--------------------+-----------+----------+
+| Time  | Pet     | Task               | Frequency | Status   |
++-------+---------+--------------------+-----------+----------+
+| 20:15 | 🐈 Luna | 💊 Give medication | once      | ⏳ To do |
+| 09:00 | 🐈 Luna | 🩺 Vet call        | once      | ⏳ To do |
+| 08:00 | 🐈 Luna | 🍖 Breakfast       | daily     | ⏳ To do |
++-------+---------+--------------------+-----------+----------+
 ```
-Today's Schedule for Jordan
-========================================
-07:30  Mochi  Morning walk (daily) [to do]
-08:00  Luna   Breakfast (daily) [to do]
-18:00  Mochi  Evening play (daily) [to do]
-20:15  Luna   Give medication (once) [to do]
-```
+
+## Formatting Features
+
+## 🎨 CLI Formatting Features
+
+The command-line demo (`main.py`) prints its results as readable, color-coded tables instead of plain text. It uses only Python's standard library, so there is nothing extra to install.
+
+Features:
+
+- Bordered tables: the schedule and every filter result print as aligned tables with the columns Time, Pet, Task, Frequency and Status.
+- Pet emojis: 🐕 for dogs, 🐈 for cats and 🐾 for any other species.
+- Task emojis: the task description picks the emoji: 🚶 walk, 🍖 feeding or breakfast, 💊 medication, 🎾 play, 🛁 grooming, 🩺 vet, and 📋 for anything else.
+- Status indicators: ✅ Done is shown in green and ⏳ To do in yellow.
+- Color coding: times are cyan, headings and table headers are bold, conflict warnings are red with a 🚨, and the completed-task message is green.
+- Section headings: each part of the demo (schedule, conflict check, filters) has an emoji heading with an underline.
+
+**Functions in `main.py`**
+
+| Function | What it does |
+|----------|--------------|
+| print_task_table(tasks, pet_for_task) | Builds and prints a bordered table of tasks, with emojis and a colored status. Prints "(no tasks)" if the list is empty. |
+| print_heading(title) | Prints a bold section title with an underline. |
+| get_pet_emoji(species) | Returns an emoji for the pet's species. |
+| get_task_emoji(description) | Returns an emoji by looking for keywords in the task description. |
+| colorize(text, code) | Wraps text in an ANSI color code. It does nothing when color is turned off. |
+| display_width(text) | Measures how many terminal columns text takes, counting emojis as two, so table columns line up. |
+| pad(text, width) | Pads text to a column width using display_width(). |
+
 
 ## 🧪 Testing PawPal+
 
@@ -94,11 +173,13 @@ Sample test output:
 
 Describe your app in numbered steps so a reader can follow along without watching a video:
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+1. Open PawPal+: Run the Streamlit application and view the main page. The app provides an interface for managing pets and organizing their care tasks.
+2. Review the pets and tasks: View the pet information and the tasks associated with each pet, including task descriptions, scheduled times, and frequencies.
+3. Build the schedule: Click the Generate Schedule button to generate the schedule using the scheduling logic in the Scheduler class.
+4. Review the sorted schedule: Check that tasks appear in chronological order based on their scheduled times. Each task should show the relevant pet name, task description, frequency, and completion status.
+5. Test task filtering: Filter tasks by pet name or completion status to view specific tasks, provided these filtering features have been implemented in the app.
+6. Review the results: Confirm that the schedule is readable and that the displayed tasks match the information entered for each pet.
+
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or link to a demo video here -->
 
@@ -122,3 +203,4 @@ Confidence level:
 4/5 stars
 
 I am confident in the reliability of PawPal+ because the basic functionality, task management, and chronological sorting have been implemented. The system organizes tasks for multiple pets and provides a clear schedule that is easy to understand. However, some advanced scheduling features still need to be completed and tested thoroughly. I would give the system four out of five stars because it has a solid foundation, but further testing and improvements are needed to ensure its reliability.
+
